@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Airbnb Clone
 
 A full-stack web application built with Node.js, Express, MongoDB, and EJS. This project allows users to browse, book, and manage vacation rentals.
@@ -166,3 +167,7 @@ ISC
 ## Author
 
 Your Name
+=======
+# Smart-Property-Booking-Platform
+Developed a Smart Property Booking Platform using the MERN stack. Implemented secure user authentication and role-based access. Built efficient booking management features with a responsive and user-friendly interface. Ensured smooth integration between frontend and backend for seamless user experience.
+>>>>>>> 5545be967488c66c9706e33c90d177665581275e
