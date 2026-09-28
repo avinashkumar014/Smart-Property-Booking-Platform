@@ -1,6 +1,16 @@
 // Core Module
+const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
+
+if (process.env.NODE_ENV === 'production') {
+  if (!process.env.MONGODB_URI) {
+    throw new Error('MONGODB_URI must be configured in production.');
+  }
+  if (!process.env.SESSION_SECRET) {
+    throw new Error('SESSION_SECRET must be configured in production.');
+  }
+}
 
 // External Module
 const express = require('express');
@@ -40,9 +50,12 @@ const randomString = (length) => {
   return result;
 }
 
+const uploadsDir = path.join(rootDir, 'uploads');
+fs.mkdirSync(uploadsDir, { recursive: true });
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
     cb(null, randomString(10) + '-' + file.originalname);
@@ -64,9 +77,9 @@ const multerOptions = {
 app.use(express.urlencoded({ extended: true }));
 app.use(multer(multerOptions).single('photo'));
 app.use(express.static(path.join(rootDir, 'public')))
-app.use("/uploads", express.static(path.join(rootDir, 'uploads')))
-app.use("/host/uploads", express.static(path.join(rootDir, 'uploads')))
-app.use("/homes/uploads", express.static(path.join(rootDir, 'uploads')))
+app.use("/uploads", express.static(uploadsDir))
+app.use("/host/uploads", express.static(uploadsDir))
+app.use("/homes/uploads", express.static(uploadsDir))
 
 app.use(session({
   secret: process.env.SESSION_SECRET || "KnowledgeGate AI with Complete Coding",

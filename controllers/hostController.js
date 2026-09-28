@@ -1,5 +1,7 @@
 const Home = require("../models/home");
 const fs = require("fs");
+const path = require("path");
+const rootDir = require("../utils/pathUtil");
 
 exports.getAddHome = (req, res, next) => {
   res.render("host/edit-home", {
@@ -54,7 +56,7 @@ exports.postAddHome = (req, res, next) => {
     return res.status(422).send("No image provided");
   }
 
-  const photo = req.file.path;
+  const photo = path.posix.join("uploads", req.file.filename);
 
   const home = new Home({
     houseName,
@@ -83,12 +85,12 @@ exports.postEditHome = (req, res, next) => {
       home.description = description;
 
       if (req.file) {
-        fs.unlink(home.photo, (err) => {
+        fs.unlink(path.join(rootDir, home.photo), (err) => {
           if (err) {
             console.log("Error while deleting file ", err);
           }
         });
-        home.photo = req.file.path;
+        home.photo = path.posix.join("uploads", req.file.filename);
       }
 
       home
